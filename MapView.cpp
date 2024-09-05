@@ -34,16 +34,20 @@ void MapView::wheelEvent(QWheelEvent* event)
 
 void MapView::mousePressEvent(QMouseEvent* event)
 {
-	if (event->button() == Qt::LeftButton) {
-		lastPos = event->pos();
+	if (event->button() == Qt::LeftButton)
+	{
+		scrollBarPos.setX(horizontalScrollBar()->value());
+		scrollBarPos.setY(verticalScrollBar()->value());
 	}
-	printf("lastPos: %d, %d\n", lastPos.x(), lastPos.y());
+	//printf("lastPos: %d, %d\n", lastPos.x(), lastPos.y());
+	lastPos = event->pos();
 }
 
 void MapView::mouseMoveEvent(QMouseEvent* event)
 {
-	if (event->buttons() & Qt::LeftButton) {
-		QPointF delta = mapToScene(event->pos()) - mapToScene(lastPos);
+	if (event->buttons() & Qt::LeftButton)
+	{
+		QPoint delta = event->pos() - lastPos;
 		translate(delta.x(), delta.y());
 	}
 	//QGraphicsView::mouseMoveEvent(event);
@@ -51,8 +55,13 @@ void MapView::mouseMoveEvent(QMouseEvent* event)
 
 void MapView::translate(int dx, int dy)
 {
-	this->horizontalScrollBar()->setValue(this->horizontalScrollBar()->value() - dx);
-	this->verticalScrollBar()->setValue(this->verticalScrollBar()->value() - dy);
+	this->horizontalScrollBar()->setValue(scrollBarPos.x() - dx);
+	this->verticalScrollBar()->setValue(scrollBarPos.y() - dy);
+}
+
+QPoint MapView::GetWidgetCenter()
+{
+	return QPoint(width() / 2, height() / 2);
 }
 
 uint64_t MapView::GetTime()

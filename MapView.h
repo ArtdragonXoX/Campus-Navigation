@@ -7,6 +7,7 @@
 
 #include "SettingVarible.h"
 #include "Definition.h"
+#include "Algorithm.h"
 
 class MapView : public QGraphicsView
 {
@@ -25,8 +26,12 @@ protected:
 	void translate(int dx, int dy);
 
 private:
+
+	QPoint GetWidgetCenter();
+
 	uint64_t GetTime();
 private:
+	QPoint scrollBarPos;
 	QPoint lastPos;
 	uint64_t mousePressTime;
 	QGraphicsScene* scene;
