@@ -3,14 +3,16 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MianWindow.h"
 
+#include "MapView.h"
+
 class MianWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MianWindow(QWidget *parent = nullptr);
-    ~MianWindow();
+	MianWindow(QWidget* parent = nullptr);
+	~MianWindow();
 
 private:
-    Ui::MianWindowClass ui;
+	Ui::MianWindowClass ui;
 };

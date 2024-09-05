@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="MianWindow">
+    <qresource prefix="/map">
+        <file>resource/mapimage.jpg</file>
     </qresource>
 </RCC>
