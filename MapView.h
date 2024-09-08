@@ -17,11 +17,14 @@ public:
 
 	void SetMap();
 	void SetMap(QString mapPath);
+
+	QPointF GetMousePoint();
+
+	void _mousePressEvent(QMouseEvent* event);
+
 protected:
-	void wheelEvent(QWheelEvent* event) override;
-	void mousePressEvent(QMouseEvent* event) override;
-	void mouseMoveEvent(QMouseEvent* event) override;
-	//void mouseReleaseEvent(QMouseEvent* event) override;
+	void wheelEvent(QWheelEvent* event)override;
+	void mouseMoveEvent(QMouseEvent* event)override;
 
 	void translate(int dx, int dy);
 
@@ -30,9 +33,18 @@ private:
 	QPoint GetWidgetCenter();
 
 	uint64_t GetTime();
+
+	void SetMousePoint();
+	void SetMousePoint(QPointF point);
+
+	void MousePointHide();
+	void MousePointShow();
+
 private:
 	QPoint scrollBarPos;
 	QPoint lastPos;
+	QGraphicsPixmapItem* mousePointPixmapItem;
+	QPointF mousePointCoordinate;
 	uint64_t mousePressTime;
 	QGraphicsScene* scene;
 	QGraphicsPixmapItem* mapItem;

@@ -5,6 +5,14 @@ MapView::MapView(QWidget* parent) : QGraphicsView(parent)
 	scene = new QGraphicsScene(this);
 	setScene(scene);
 	SetMap();
+	this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	mousePointPixmapItem = new QGraphicsPixmapItem(QPixmap("./resource/pushpin.png"));
+	mousePointPixmapItem->setZValue(2);
+	mousePointPixmapItem->setScale(0.5);
+	scene->addItem(mousePointPixmapItem);
+	MousePointHide();
+	centerOn(500, 500);
 }
 
 MapView::~MapView()
@@ -21,6 +29,7 @@ void MapView::SetMap(QString mapPath)
 {
 	QPixmap pixmap(mapPath);
 	mapItem = new QGraphicsPixmapItem(pixmap);
+	mapItem->setZValue(-1);
 	scene->addItem(mapItem);
 	resetTransform();
 }
@@ -32,7 +41,7 @@ void MapView::wheelEvent(QWheelEvent* event)
 	scale(factor, factor);
 }
 
-void MapView::mousePressEvent(QMouseEvent* event)
+void MapView::_mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
@@ -40,6 +49,12 @@ void MapView::mousePressEvent(QMouseEvent* event)
 		scrollBarPos.setY(verticalScrollBar()->value());
 	}
 	//printf("lastPos: %d, %d\n", lastPos.x(), lastPos.y());
+	if (event->buttons() & Qt::RightButton)
+	{
+		mousePointCoordinate = mapToScene(event->pos());
+		//printf("mousePointCoordinate: %f, %f\n", mousePointCoordinate.x(), mousePointCoordinate.y());
+		SetMousePoint();
+	}
 	lastPos = event->pos();
 }
 
@@ -67,4 +82,30 @@ QPoint MapView::GetWidgetCenter()
 uint64_t MapView::GetTime()
 {
 	return QDateTime::currentDateTime().toMSecsSinceEpoch();
+}
+
+void MapView::SetMousePoint()
+{
+	SetMousePoint(mousePointCoordinate);
+	MousePointShow();
+}
+
+void MapView::SetMousePoint(QPointF point)
+{
+	mousePointPixmapItem->setPos(GetMousePoint());
+}
+
+QPointF MapView::GetMousePoint()
+{
+	return mousePointCoordinate - QPointF(mousePointPixmapItem->boundingRect().width() / 4, mousePointPixmapItem->boundingRect().height() / 2 - 20);
+}
+
+void MapView::MousePointHide()
+{
+	mousePointPixmapItem->hide();
+}
+
+void MapView::MousePointShow()
+{
+	mousePointPixmapItem->show();
 }
