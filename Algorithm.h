@@ -34,6 +34,15 @@ typedef struct AnswerList {
 
 class Algorithm
 {
+private:
+	uint16_t pointNum;
+	uint16_t* V;
+	uint16_t* path;
+	uint16_t* dist;
+	uint16_t** Edge;
+
+	Algorithm(uint16_t firstpoint,uint16_t endpoint);
+
 public:
 
 	static PointList DataPutIn(QList<uint16_t>(&WayPointList));//Êý¾ÝÂ¼Èë
