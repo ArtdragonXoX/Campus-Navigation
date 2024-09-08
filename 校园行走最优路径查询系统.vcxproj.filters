@@ -76,4 +76,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test1.json" />
+    <None Include="test2.json" />
+  </ItemGroup>
 </Project>
