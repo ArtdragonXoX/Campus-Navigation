@@ -95,7 +95,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc)
 							wayPointMap[k].name = thirdValue.toString();                    //录入name
 							qDebug() << "      "<<subkey << ":" << thirdValue.toString();
 						}
-						if (thirdValue.isArray() && subkey == "coord")
+						if (thirdValue.isArray() && subkey == "Coord")
 						{                                        //数组
 							QJsonArray finalArray = thirdValue.toArray();
 							qDebug() << "      " << subkey << ":" << "[";
@@ -174,15 +174,15 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc)
 
 						if (thirdValue.isDouble() && subkey == "id") {               
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[k].id = thirdValue.toDouble();                 //录入id
+							roadMap[k].id = thirdValue.toDouble();         //录入id
 						}
 						if (thirdValue.isDouble() && subkey == "u") {               
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[k].u = thirdValue.toDouble();                  //录入u
+							roadMap[n].u = thirdValue.toDouble();          //录入u
 						}
 						if (thirdValue.isDouble() && subkey == "v") {             
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[k].v = thirdValue.toDouble();                  //录入v
+							roadMap[k].v = thirdValue.toDouble();          //录入v
 						}
 					}
 				}
