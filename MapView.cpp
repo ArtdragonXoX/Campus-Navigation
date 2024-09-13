@@ -5,6 +5,14 @@ MapView::MapView(QWidget* parent) : QGraphicsView(parent)
 	scene = new QGraphicsScene(this);
 	setScene(scene);
 	SetMap();
+	this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	mousePointPixmapItem = new QGraphicsPixmapItem(QPixmap("./resource/pushpin.png"));
+	mousePointPixmapItem->setZValue(2);
+	mousePointPixmapItem->setScale(0.25);
+	scene->addItem(mousePointPixmapItem);
+	MousePointHide();
+	centerOn(500, 500);
 }
 
 MapView::~MapView()
@@ -21,6 +29,7 @@ void MapView::SetMap(QString mapPath)
 {
 	QPixmap pixmap(mapPath);
 	mapItem = new QGraphicsPixmapItem(pixmap);
+	mapItem->setZValue(-1);
 	scene->addItem(mapItem);
 	resetTransform();
 }
@@ -32,7 +41,7 @@ void MapView::wheelEvent(QWheelEvent* event)
 	scale(factor, factor);
 }
 
-void MapView::mousePressEvent(QMouseEvent* event)
+void MapView::_mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
@@ -40,7 +49,37 @@ void MapView::mousePressEvent(QMouseEvent* event)
 		scrollBarPos.setY(verticalScrollBar()->value());
 	}
 	//printf("lastPos: %d, %d\n", lastPos.x(), lastPos.y());
+	if (event->buttons() & Qt::RightButton)
+	{
+		mousePointCoordinate = mapToScene(event->pos());
+		//printf("mousePointCoordinate: %f, %f\n", mousePointCoordinate.x(), mousePointCoordinate.y());
+		SetMousePoint();
+	}
 	lastPos = event->pos();
+}
+
+void MapView::AddWayPoint(uint16_t id)
+{
+	auto wayPointItem = new WayPointPixmapItem(id);
+	wayPointMap.insert(id, wayPointItem);
+	scene->addItem(wayPointItem);
+}
+
+void MapView::AddRoad(uint16_t id)
+{
+	auto roadItem = new RoadRectItem(id);
+	roadItemMap.insert(id, roadItem);
+	scene->addItem(roadItem);
+}
+
+void MapView::DeleteWayPoint(uint16_t id)
+{
+	auto wayPointItem = wayPointMap.value(id);
+	if (wayPointItem)
+	{
+		scene->removeItem(wayPointItem);
+		wayPointMap.remove(id);
+	}
 }
 
 void MapView::mouseMoveEvent(QMouseEvent* event)
@@ -67,4 +106,39 @@ QPoint MapView::GetWidgetCenter()
 uint64_t MapView::GetTime()
 {
 	return QDateTime::currentDateTime().toMSecsSinceEpoch();
+}
+
+void MapView::SetMousePoint()
+{
+	SetMousePoint(mousePointCoordinate);
+	MousePointShow();
+}
+
+void MapView::SetMousePoint(QPointF point)
+{
+	mousePointPixmapItem->setPos(GetMousePoint());
+}
+
+QPointF MapView::GetMousePoint()
+{
+	return mousePointCoordinate - QPointF(mousePointPixmapItem->boundingRect().width() / 8, mousePointPixmapItem->boundingRect().height() / 8 + 16);
+}
+
+void MapView::MousePointHide()
+{
+	mousePointPixmapItem->hide();
+}
+
+void MapView::MousePointShow()
+{
+	mousePointPixmapItem->show();
+}
+
+void MapView::ReadWayPoint()
+{
+	for (auto& wayPointItem : GlobalVariable::wayPointMap)
+	{
+		AddWayPoint(wayPointItem.id);
+		printf("id: %d\n", wayPointItem.id);
+	}
 }

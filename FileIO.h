@@ -14,17 +14,19 @@
 #include "Definition.h"
 #include "GlobalVariable.h"
 
-
 class FileIO
 {
 public:
 
 	//写入地图数据
-	//static void WriteMapData();
+	static void WriteMapData();
 	static void WriteMapData(QMap <uint16_t, WayPoint> pointMap, QMap <uint16_t, Road> roadMap);
 
+	static void WriteWayPointData();
+	static void WriteRoadData();
+
 	//读取地图数据
-	//static void ReadMapData();
+	static void ReadMapData();
 	static void ReadMapData(const char* filename_point, const char* filename_road);
 
 private:
