@@ -34,6 +34,8 @@ public:
 	void MousePointHide();
 	void MousePointShow();
 
+	void ReadWayPoint();
+
 protected:
 	void wheelEvent(QWheelEvent* event)override;
 	void mouseMoveEvent(QMouseEvent* event)override;

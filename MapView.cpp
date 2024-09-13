@@ -133,3 +133,12 @@ void MapView::MousePointShow()
 {
 	mousePointPixmapItem->show();
 }
+
+void MapView::ReadWayPoint()
+{
+	for (auto& wayPointItem : GlobalVariable::wayPointMap)
+	{
+		AddWayPoint(wayPointItem.id);
+		printf("id: %d\n", wayPointItem.id);
+	}
+}

@@ -8,6 +8,7 @@
 #include "GlobalVariable.h"
 #include "SignalHandler.h"
 #include "BuildingsListItem.h"
+#include "FileIO.h"
 
 class MianWindow : public QMainWindow
 {
