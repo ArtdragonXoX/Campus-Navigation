@@ -5,9 +5,12 @@
 #include <QWheelEvent>
 #include <qscrollbar.h>
 
+#include "WayPointPixmapItem.h"
+#include "RoadRectItem.h"
 #include "SettingVarible.h"
 #include "Definition.h"
 #include "Algorithm.h"
+#include "GlobalVariable.h"
 
 class MapView : public QGraphicsView
 {
@@ -21,6 +24,15 @@ public:
 	QPointF GetMousePoint();
 
 	void _mousePressEvent(QMouseEvent* event);
+
+	void AddWayPoint(uint16_t id);
+
+	void AddRoad(uint16_t id);
+
+	void DeleteWayPoint(uint16_t id);
+
+	void MousePointHide();
+	void MousePointShow();
 
 protected:
 	void wheelEvent(QWheelEvent* event)override;
@@ -37,10 +49,12 @@ private:
 	void SetMousePoint();
 	void SetMousePoint(QPointF point);
 
-	void MousePointHide();
-	void MousePointShow();
-
 private:
+
+	QMap<uint16_t, WayPointPixmapItem*> wayPointMap;
+
+	QMap<uint16_t, RoadRectItem*> roadItemMap;
+
 	QPoint scrollBarPos;
 	QPoint lastPos;
 	QGraphicsPixmapItem* mousePointPixmapItem;

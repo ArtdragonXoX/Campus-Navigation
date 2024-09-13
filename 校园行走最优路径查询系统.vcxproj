@@ -89,8 +89,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BuildingsListItem.cpp" />
+    <ClCompile Include="RoadRectItem.cpp" />
     <ClCompile Include="SettingVarible.cpp" />
+    <ClCompile Include="SignalHandler.cpp" />
+    <ClCompile Include="WayPointPixmapItem.cpp" />
     <QtRcc Include="MianWindow.qrc" />
+    <QtUic Include="BuildingsListItem.ui" />
     <QtUic Include="MianWindow.ui" />
     <QtMoc Include="MianWindow.h" />
     <ClCompile Include="Algorithm.cpp" />
@@ -102,11 +107,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
+    <QtMoc Include="SignalHandler.h" />
+    <QtMoc Include="BuildingsListItem.h" />
     <ClInclude Include="Definition.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="GlobalVariable.h" />
     <ClInclude Include="MapView.h" />
+    <ClInclude Include="RoadRectItem.h" />
     <ClInclude Include="SettingVarible.h" />
+    <QtMoc Include="WayPointPixmapItem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

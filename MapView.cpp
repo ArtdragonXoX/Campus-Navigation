@@ -9,7 +9,7 @@ MapView::MapView(QWidget* parent) : QGraphicsView(parent)
 	this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	mousePointPixmapItem = new QGraphicsPixmapItem(QPixmap("./resource/pushpin.png"));
 	mousePointPixmapItem->setZValue(2);
-	mousePointPixmapItem->setScale(0.5);
+	mousePointPixmapItem->setScale(0.25);
 	scene->addItem(mousePointPixmapItem);
 	MousePointHide();
 	centerOn(500, 500);
@@ -58,6 +58,30 @@ void MapView::_mousePressEvent(QMouseEvent* event)
 	lastPos = event->pos();
 }
 
+void MapView::AddWayPoint(uint16_t id)
+{
+	auto wayPointItem = new WayPointPixmapItem(id);
+	wayPointMap.insert(id, wayPointItem);
+	scene->addItem(wayPointItem);
+}
+
+void MapView::AddRoad(uint16_t id)
+{
+	auto roadItem = new RoadRectItem(id);
+	roadItemMap.insert(id, roadItem);
+	scene->addItem(roadItem);
+}
+
+void MapView::DeleteWayPoint(uint16_t id)
+{
+	auto wayPointItem = wayPointMap.value(id);
+	if (wayPointItem)
+	{
+		scene->removeItem(wayPointItem);
+		wayPointMap.remove(id);
+	}
+}
+
 void MapView::mouseMoveEvent(QMouseEvent* event)
 {
 	if (event->buttons() & Qt::LeftButton)
@@ -97,7 +121,7 @@ void MapView::SetMousePoint(QPointF point)
 
 QPointF MapView::GetMousePoint()
 {
-	return mousePointCoordinate - QPointF(mousePointPixmapItem->boundingRect().width() / 4, mousePointPixmapItem->boundingRect().height() / 2 - 20);
+	return mousePointCoordinate - QPointF(mousePointPixmapItem->boundingRect().width() / 8, mousePointPixmapItem->boundingRect().height() / 8 + 16);
 }
 
 void MapView::MousePointHide()
