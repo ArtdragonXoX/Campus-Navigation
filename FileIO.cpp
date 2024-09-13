@@ -81,21 +81,49 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc)
 						QString subkey = subkeys.at(n);
 						QJsonValue thirdValue = subObj.value(subkeys.at(n));
 
-						if (thirdValue.isDouble()) {               //浮点
+						if (thirdValue.isDouble() && subkey == "id") {      
+							wayPointMap[k].id = thirdValue.toDouble();                      //录入id
 							qDebug() << "      "<<subkey << ": " << thirdValue.toDouble();
 						}
+						if (thirdValue.isDouble() && subkey == "type") {   
+						
+							wayPointMap[k].type = WayPointType(thirdValue.toInt());         //录入type
+							qDebug() << "      " << subkey << ": " << thirdValue.toInt();
+						}
 
-						if (thirdValue.isString()) {               //字符
+						if (thirdValue.isString() && subkey == "name") {     
+							wayPointMap[k].name = thirdValue.toString();                    //录入name
 							qDebug() << "      "<<subkey << ":" << thirdValue.toString();
 						}
-						if (thirdValue.isArray()) 
+						if (thirdValue.isArray() && subkey == "coord")
+						{                                        //数组
+							QJsonArray finalArray = thirdValue.toArray();
+							qDebug() << "      " << subkey << ":" << "[";
+							for (int m = 0; m < finalArray.size(); ++m)
+							{
+								if (m == 0) {                   
+									wayPointMap[k].coord.x = finalArray[m].toDouble();     //录入x坐标
+								}
+								if (m == 1) {
+									wayPointMap[k].coord.y = finalArray[m].toDouble();     //录入y坐标
+								}
+								
+								if (m + 1 == finalArray.size()) {
+									qDebug() << "        " << finalArray[m].toDouble() << "]";
+								}
+								else {
+									qDebug() << "        " << finalArray[m].toDouble() << ",";
+								}
+							}
+						}
+						if (thirdValue.isArray() && subkey == "roadIds")
 						{                                        //数组
 							QJsonArray finalArray = thirdValue.toArray();
 							qDebug() << "      " << subkey << ":" << "[";
 							for (int m = 0; m < finalArray.size(); ++m)
 							{
 								
-								wayPointMap[n].roadIds[m] = finalArray[m].toDouble();   //录入路径id
+								wayPointMap[k].roadIds[m] = finalArray[m].toDouble();       //录入路径id
 
 								if (m + 1 == finalArray.size()) {
 									qDebug() << "        " << finalArray[m].toDouble() << "]";
@@ -146,15 +174,15 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc)
 
 						if (thirdValue.isDouble() && subkey == "id") {               
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[n].id = thirdValue.toDouble();         //录入id
+							roadMap[k].id = thirdValue.toDouble();                 //录入id
 						}
 						if (thirdValue.isDouble() && subkey == "u") {               
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[n].u = thirdValue.toDouble();          //录入u
+							roadMap[k].u = thirdValue.toDouble();                  //录入u
 						}
 						if (thirdValue.isDouble() && subkey == "v") {             
 							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[n].v = thirdValue.toDouble();          //录入v
+							roadMap[k].v = thirdValue.toDouble();                  //录入v
 						}
 					}
 				}
