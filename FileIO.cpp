@@ -49,7 +49,7 @@ void FileIO::ReadMapData(const char* filename_point, const char* filename_road)
 	}
 }
 
-void FileIO::ParseWayPointData(QJsonDocument Jdoc)
+void FileIO::ParseWayPointData(QJsonDocument Jdoc)       //路径点
 {
 	QJsonObject rootObj = Jdoc.object();
 	QJsonValue root = rootObj.value("root");
@@ -89,52 +89,30 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc)
 	}
 }
 
-void FileIO::ParseWayRoadData(QJsonDocument Jdoc)
+void FileIO::ParseWayRoadData(QJsonDocument Jdoc)        //道路
 {
-	QJsonObject obj = Jdoc.object();
-	QStringList keys = obj.keys();
-	for (int i = 0; i < keys.size(); ++i) {
-		QString key = keys.at(i);
-		QJsonValue value = obj.value(key);
+	QJsonObject rootObj = Jdoc.object();
+	QJsonValue root = rootObj.value("root");
+	if (root.isArray()) {
+		QJsonArray points = root.toArray();
+		for (int i = 0; i < points.size(); ++i) {
+			QJsonValue perPoint = points.at(i);
+			if (perPoint.isObject()) {
+				QJsonObject perPointObj = perPoint.toObject();
 
-		if (value.isArray()) {
-			qDebug() << "  " << key << ":" << "[";
+				QJsonValue id = perPointObj.value("id");
+				QJsonValue u = perPointObj.value("u");
+				QJsonValue v = perPointObj.value("v");
 
-			QJsonArray Array = value.toArray();
 
-			for (int k = 0; k < Array.size(); ++k)
-			{
-				qDebug() << "    " << "{";
+				uint16_t Map_id = roadMap[i].id;
+				uint16_t Map_u = roadMap[i].u;
+				uint16_t Map_v = roadMap[i].v;
 
-				QJsonValue subValue = Array.at(k);
-
-				if (subValue.isObject())   //对象
-				{
-					QJsonObject subObj = subValue.toObject();
-					QStringList subkeys = subObj.keys();
-					for (int n = 0; n < subkeys.size(); ++n)
-					{
-
-						QString subkey = subkeys.at(n);
-						QJsonValue thirdValue = subObj.value(subkeys.at(n));
-
-						if (thirdValue.isDouble() && subkey == "id") {               
-							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[k].id = thirdValue.toDouble();         //录入id
-						}
-						if (thirdValue.isDouble() && subkey == "u") {               
-							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[n].u = thirdValue.toDouble();          //录入u
-						}
-						if (thirdValue.isDouble() && subkey == "v") {             
-							qDebug() << "      " << subkey << ": " << thirdValue.toDouble();
-							roadMap[k].v = thirdValue.toDouble();          //录入v
-						}
-					}
-				}
-				qDebug() << "    " << "}";
+				Map_id = id.toInt();
+				Map_u = u.toInt();
+				Map_v = v.toInt();
 			}
-			qDebug() << "  " << "]";
 		}
 	}
 }
