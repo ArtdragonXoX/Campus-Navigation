@@ -7,6 +7,9 @@ MianWindow::MianWindow(QWidget* parent)
 	AddWayPointWidgetHide();
 	InitConnection();
 	userWidgetHide();
+	FileIO::ReadMapData();
+	ui.mapWidget->ReadWayPoint();
+	ui.mapWidget->ReadRoad();
 }
 
 MianWindow::~MianWindow()
@@ -22,6 +25,8 @@ void MianWindow::InitConnection()
 	connect(signalHandler, &SignalHandler::WayPointItemClicked, this, &MianWindow::WayPointItemClicked);
 	connect(ui.buildingsListClearPushButton, &QPushButton::clicked, this, &MianWindow::ClearBuildingList);
 	connect(ui.buildingsListQueryPushButton, &QPushButton::clicked, this, &MianWindow::Query);
+	connect(ui.exportWayPointPushButton, &QPushButton::clicked, this, &MianWindow::ExportWayPoint);
+	connect(ui.exportRoadPushButton, &QPushButton::clicked, this, &MianWindow::ExportRoad);
 }
 
 void MianWindow::mousePressEvent(QMouseEvent* event)
@@ -144,8 +149,10 @@ void MianWindow::Query()
 
 void MianWindow::ExportWayPoint()
 {
+	FileIO::WriteWayPointData();
 }
 
 void MianWindow::ExportRoad()
 {
+	FileIO::WriteRoadData();
 }

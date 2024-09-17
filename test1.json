@@ -1,0 +1,32 @@
+{
+  "WayPoint": [
+    {
+      "id": 1,
+      "name": "教学楼e",
+      "coord": [
+        111.23,
+        111.0
+      ],
+      "type": "buildings",
+      "roadids": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "id": 2,
+      "name": "教学楼c",
+      "coord": [
+        121.23,
+        131.0
+      ],
+      "type": "roadNodes",
+      "roadids": [
+        1,
+        4,
+        5
+      ]
+    }
+  ]
+ }

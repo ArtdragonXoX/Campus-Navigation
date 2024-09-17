@@ -117,6 +117,10 @@
     <ClInclude Include="SettingVarible.h" />
     <QtMoc Include="WayPointPixmapItem.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test1.json" />
+    <None Include="test2.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

@@ -1,8 +1,11 @@
 #pragma once
+
 #include <cstdint>
 #include <QString>
 #include <QList>
 #include <QPointF>
+
+using namespace std;
 
 //定义数据类型
 

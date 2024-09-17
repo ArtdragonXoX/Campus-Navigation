@@ -133,3 +133,21 @@ void MapView::MousePointShow()
 {
 	mousePointPixmapItem->show();
 }
+
+void MapView::ReadWayPoint()
+{
+	for (auto& wayPointItem : GlobalVariable::wayPointMap)
+	{
+		AddWayPoint(wayPointItem.id);
+		printf("id: %d\n", wayPointItem.id);
+	}
+}
+
+void MapView::ReadRoad()
+{
+	for (auto& roadItem : GlobalVariable::roadMap)
+	{
+		AddRoad(roadItem.id);
+		printf("id: %d\n", roadItem.id);
+	}
+}
