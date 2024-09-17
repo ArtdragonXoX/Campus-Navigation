@@ -130,7 +130,11 @@ void MianWindow::AddBuidingsToList()
 
 void MianWindow::ClearBuildingList()
 {
-	ui.buildingsListWidget->clear();
+	int num = ui.buildingsListWidget->count();
+	for (int i = 0; i < num; i++)
+	{
+		delete ui.buildingsListWidget->itemWidget(ui.buildingsListWidget->item(0));
+	}
 }
 
 void MianWindow::DeleteBuildingInList(uint16_t id)
