@@ -58,6 +58,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc)       //路径点
 		for (int i = 0; i < points.size(); ++i) {
 			QJsonValue perPoint = points.at(i);
 			if (perPoint.isObject()) {
+				WayPoint data = { 0 };
 				QJsonObject perPointObj = perPoint.toObject();
 
 				QJsonValue id = perPointObj.value("id");
@@ -65,25 +66,21 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc)       //路径点
 				QJsonArray roadIds = perPointObj.value("roadIds").toArray();
 				QJsonValue type = perPointObj.value("type");
 				QJsonValue name = perPointObj.value("name");
-
-				QString Map_name = wayPointMap[i].name;
-				uint16_t Map_id = wayPointMap[i].id;
-				Coord Map_coord = wayPointMap[i].coord;
-				QList<uint16_t> Map_roadIds = wayPointMap[i].roadIds;
-				WayPointType Map_type = wayPointMap[i].type;
-
-				Map_name = name.toString();
-				Map_id = id.toInt();
+				
+				data.name = name.toString();
+				data.id = id.toInt();
 				for (int j = 0; j < coord.size(); ++j) {
-					Map_coord.x = coord[j].toDouble();
+					data.coord.x = coord[j].toDouble();
 					if (j + 1 == coord.size()) {
-						Map_coord.y = coord[j].toDouble();
+						data.coord.y = coord[j].toDouble();
 					}
 				}
-				Map_type = WayPointType(type.toInt());
+				data.type = WayPointType(type.toInt());
 				for (int j = 0; j < roadIds.size(); ++j) {
-					Map_roadIds[j] = roadIds[j].toInt();
+					data.roadIds[j] = roadIds[j].toInt();
 				}
+
+				wayPointMap.insert(i,data);
 			}
 		}
 	}
@@ -98,20 +95,18 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc)        //道路
 		for (int i = 0; i < points.size(); ++i) {
 			QJsonValue perPoint = points.at(i);
 			if (perPoint.isObject()) {
+				Road data = { 0 };
 				QJsonObject perPointObj = perPoint.toObject();
 
 				QJsonValue id = perPointObj.value("id");
 				QJsonValue u = perPointObj.value("u");
 				QJsonValue v = perPointObj.value("v");
 
-
-				uint16_t Map_id = roadMap[i].id;
-				uint16_t Map_u = roadMap[i].u;
-				uint16_t Map_v = roadMap[i].v;
-
-				Map_id = id.toInt();
-				Map_u = u.toInt();
-				Map_v = v.toInt();
+				data.id = id.toInt();
+				data.u = u.toInt();
+				data.v = v.toInt();
+				
+				roadMap.insert(i,data);
 			}
 		}
 	}
