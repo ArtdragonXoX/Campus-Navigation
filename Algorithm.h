@@ -3,6 +3,7 @@
 //算法类
 //使用说明： Dijistra法 路径ID的QList = 类变量名.ReturnData(终点,类变量名.Method(起点, 类变量名.AddMiddlPoint(类变量名.DataPutIn(传入的QList)))); 
 
+
 #include <QPoint>
 #include <qmath.h>
 
@@ -12,6 +13,7 @@
 #include <string.h>
 #include <cfloat>
 #include <stack>
+#include <utility>
 
 using namespace GlobalVariable;
 using namespace std;

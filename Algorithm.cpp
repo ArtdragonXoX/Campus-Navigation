@@ -8,11 +8,6 @@ PointList Algorithm::DataPutIn(QList<uint16_t> (&WayPointList)) {
 	PointList pointList;
 	pointList.WayPointList = WayPointList;
 	pointList.PointNum = pointList.WayPointList.size();
-	QList<double> tem;//初始化邻接表
-	for (int i = 0;i < pointList.PointNum;i++) 
-		tem.push_back(INF);
-	for (int i = 0;i < pointList.PointNum;i++)
-		pointList.AdjTable.push_back(tem);
 
 	return pointList;
 }
@@ -21,6 +16,12 @@ PointList Algorithm::AddMiddlPoint(PointList pointList) {//出问题了
 	/*
 	* 采用深度搜索补充隐藏点,并制作邻接表
 	*/
+	QList<double> tem;//初始化邻接表
+	for (int i = 0;i < pointList.PointNum;i++)
+		tem.push_back(INF);
+	for (int i = 0;i < pointList.PointNum;i++)
+		pointList.AdjTable.push_back(tem);
+
 	uint16_t searchNum = pointList.PointNum;
 	for (uint16_t i = 0;i < searchNum;i++) {
 		for (uint16_t j = i;j < searchNum;j++) {
