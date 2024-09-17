@@ -12,8 +12,8 @@ struct Road;
 //坐标，地图左下角为原点
 struct Coord
 {
-	uint16_t x;
-	uint16_t y;
+	double x;//修改了类型
+	double y;
 	double_t operator - (const Coord& other) const
 	{
 		return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2));
