@@ -23,6 +23,7 @@ using namespace std;
 typedef struct PointList {
 	QList<uint16_t> WayPointList;
 	QList<QList<double>> AdjTable;
+	QList<QList<uint16_t>> RoadTable;
 	QList<uint16_t> CheckList;
 	uint16_t PointNum;
 }PointList;
@@ -31,20 +32,12 @@ typedef struct AnswerList {
 	QList<uint16_t> WayPointList;
 	QList<double> dist;
 	QList<uint16_t> p;
+	QList<uint16_t> p_road;
 	uint16_t startPointID;
 }AnswerList;
 
 class Algorithm
 {
-private:
-	uint16_t pointNum;
-	uint16_t* V;
-	uint16_t* path;
-	uint16_t* dist;
-	uint16_t** Edge;
-
-	Algorithm(uint16_t firstpoint,uint16_t endpoint);
-
 public:
 
 	static PointList DataPutIn(QList<uint16_t>(&WayPointList));//数据录入
@@ -52,8 +45,8 @@ public:
 	static void Method();
 	static AnswerList Method(uint16_t startPointID, PointList pointList);//Dijkatra算法实现
 	//static void Method(int y);//A*算法实现
-	static QList<uint16_t> ReturnData(uint16_t endPointID, AnswerList answerList);//输出结果数据
+	static QList<pair<uint16_t, uint16_t>> ReturnData(uint16_t endPointID, AnswerList answerList);//输出结果数据
 	static uint16_t DeepSearch(uint16_t startPointID, uint16_t endPointID, uint16_t lastPointID, PointList& pointList);
-	static double JudgeSameRoad(uint16_t point1, uint16_t point2);
+	static pair<double, uint16_t> JudgeSameRoad(uint16_t point1, uint16_t point2);
 	static bool CheckSame(uint16_t point,PointList (&pointList));
 };

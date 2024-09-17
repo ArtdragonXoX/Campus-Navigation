@@ -12,46 +12,54 @@ PointList Algorithm::DataPutIn(QList<uint16_t> (&WayPointList)) {
 	return pointList;
 }
 
-PointList Algorithm::AddMiddlPoint(PointList pointList) {//出问题了
+PointList Algorithm::AddMiddlPoint(PointList pointList) {
 	/*
 	* 采用深度搜索补充隐藏点,并制作邻接表
 	*/
 	QList<double> tem;//初始化邻接表
-	for (int i = 0;i < pointList.PointNum;i++)
+	QList<uint16_t> temp;
+	for (int i = 0;i < pointList.PointNum;i++) {
 		tem.push_back(INF);
-	for (int i = 0;i < pointList.PointNum;i++)
+		temp.push_back(UINT16_MAX);
+	}	
+	for (int i = 0;i < pointList.PointNum;i++) {
 		pointList.AdjTable.push_back(tem);
-
+		pointList.RoadTable.push_back(temp);
+	}
+		
 	uint16_t searchNum = pointList.PointNum;
 	for (uint16_t i = 0;i < searchNum;i++) {
 		for (uint16_t j = i;j < searchNum;j++) {
-			double judge = JudgeSameRoad(pointList.WayPointList[i], pointList.WayPointList[j]);
-			if (judge==INF) {
+			pair<double, uint16_t> judge = JudgeSameRoad(pointList.WayPointList[i], pointList.WayPointList[j]);
+			if (judge.first==INF) {
 				DeepSearch(pointList.WayPointList[i], pointList.WayPointList[j],0,pointList);
 				pointList.CheckList.clear();
 			}
 			else {
-				pointList.AdjTable[i][j] = judge;
-				pointList.AdjTable[j][i] = judge;
+				pointList.AdjTable[i][j] = judge.first;
+				pointList.AdjTable[j][i] = judge.first;
+
+				pointList.RoadTable[i][j] = judge.second;
+				pointList.RoadTable[j][i] = judge.second;
 			}
 		}
 	}
 	return pointList;
 }
 
-double Algorithm::JudgeSameRoad(uint16_t point1, uint16_t point2) {
-	if (point1 == point2) return INF;
-	QList<uint16_t> roadIDs = wayPointMap.value(point1).roadIds;
+pair<double,uint16_t> Algorithm::JudgeSameRoad(uint16_t point1, uint16_t point2) {
+	if (point1 == point2) return { INF,0 };
+	QList<uint16_t> roadIDs = wayPointMap.value(point1).GetRoadIds();
 	for (int i = 0;i < roadIDs.size();i++) {
 		Road roadID = roadMap.value(roadIDs[i]);
 		if (point2 == roadID.u || point2 == roadID.v) {
 			WayPoint P1 = wayPointMap.value(point1);
 			WayPoint P2 = wayPointMap.value(point2);
 			double distance = P1 - P2;
-			return distance;
+			return { distance , roadIDs[i]};
 		}
 	}
-	return INF;
+	return { INF,0 };
 }
 
 bool Algorithm::CheckSame(uint16_t point, PointList(&pointList)) {
@@ -75,7 +83,7 @@ uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID,uint16
 	pointList.CheckList.push_back(startPointID);
 
 	int judge = 0;
-	QList<uint16_t> roadIDs = wayPointMap.value(startPointID).roadIds;
+	QList<uint16_t> roadIDs = wayPointMap.value(startPointID).GetRoadIds();
 	for (int i = 0;i < roadIDs.size();i++) {
 		Road roadID = roadMap.value(roadIDs[i]);
 		uint16_t otherone;
@@ -101,15 +109,26 @@ uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID,uint16
 			pointList.PointNum++;
 
 			QList<double> tem;
+			QList<uint16_t> temp;
 			for (int i = 0;i < pointList.PointNum;i++) {
 				tem.push_back(INF);
+				temp.push_back(UINT16_MAX);
 			}
+			
 			pointList.AdjTable.push_back(tem);
+			pointList.RoadTable.push_back(temp);
+
 			for (int i = 0;i < pointList.PointNum - 1;i++) {
 				pointList.AdjTable[i].push_back(INF);
-				double tem = JudgeSameRoad(pointList.WayPointList[i], startPointID);
-				pointList.AdjTable[i][pointList.PointNum - 1] = tem;
-				pointList.AdjTable[pointList.PointNum - 1][i] = tem;
+				pointList.RoadTable[i].push_back(UINT16_MAX);
+
+				pair<double, uint16_t> tem = JudgeSameRoad(pointList.WayPointList[i], startPointID);
+
+				pointList.AdjTable[i][pointList.PointNum - 1] = tem.first;
+				pointList.AdjTable[pointList.PointNum - 1][i] = tem.first;
+
+				pointList.RoadTable[i][pointList.PointNum - 1] = tem.second;
+				pointList.RoadTable[pointList.PointNum - 1][i] = tem.second;
 			}
 		}
 	}
@@ -135,6 +154,7 @@ AnswerList Algorithm::Method(uint16_t startPointID, PointList pointList) {
 			answerList.p.push_back(UINT16_MAX);
 		else
 			answerList.p.push_back(startPointID);
+		answerList.p_road.push_back(UINT16_MAX);
 	}
 	answerList.dist[startPointID] = 0;
 	flag[startPointID] = true;
@@ -153,32 +173,33 @@ AnswerList Algorithm::Method(uint16_t startPointID, PointList pointList) {
 				if (answerList.dist[j] > answerList.dist[t] + pointList.AdjTable[t][j]) {
 					answerList.dist[j] = answerList.dist[t] + pointList.AdjTable[t][j];
 					answerList.p[j] = t;
+					answerList.p_road[j] = pointList.RoadTable[t][j];
 				}
 	}
 	return answerList;
 }
 
-QList<uint16_t> Algorithm::ReturnData(uint16_t endPointID, AnswerList answerList) {
+QList<pair<uint16_t, uint16_t>> Algorithm::ReturnData(uint16_t endPointID, AnswerList answerList) {
 	//输出数据
-	QList<uint16_t> answer;
+	QList<pair<uint16_t,uint16_t>> answer;
 
 	double front;
 	for (uint16_t i = 0;i < answerList.WayPointList.size();i++)
 		if (answerList.WayPointList[i] == endPointID)
 			front = i;
 
-	stack<uint16_t>S;
+	stack<pair<uint16_t,uint16_t>>S;
 	if (front == UINT16_MAX && endPointID != front)
 		cout << "无路可达！" << endl;
 
 	while (front != UINT16_MAX) {
-		S.push(front);
+		S.push({ front ,answerList.p_road[front]});
 		front = answerList.p[front];
 	}
 	cout << "路径为： ";
 	while (!S.empty()) {
-		cout << answerList.WayPointList[S.top()] << "--";
-		answer.push_back(answerList.WayPointList[S.top()]);
+		cout << answerList.WayPointList[S.top().first] << "--";
+		answer.push_back({ answerList.WayPointList[S.top().first] ,S.top().second });
 		S.pop();
 	}
 	return answer;

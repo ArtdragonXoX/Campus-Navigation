@@ -150,19 +150,8 @@ void MianWindow::Query()
 		wayPointList.append(item->ID());
 	}
 	//ртобн╙╡Бйт
-	for (int i = 0;i < wayPointMap.size();i++) {
-		cout << "ID is:" << wayPointMap[i].id << endl;
-	}
-	cout << endl;
-	for (int i = 0;i < roadMap.size();i++) {
-		cout << "roadID is:" << roadMap[i].id;
-		cout << "road.v is" << roadMap[i].v << "and ";
-		cout << "road.u is" << roadMap[i].u << endl;
-	}
 	Algorithm A;
-	QList<uint16_t> answer = A.ReturnData(wayPointList[wayPointList.size()-1], A.Method(wayPointList[0], A.AddMiddlPoint(A.DataPutIn(wayPointList))));
-	for (int i = 0;i < answer.size();i++)
-		cout << answer[i] << " ";
+	A.ReturnData(wayPointList[wayPointList.size()-1], A.Method(wayPointList[0], A.AddMiddlPoint(A.DataPutIn(wayPointList))));
 }
 
 void MianWindow::ExportWayPoint()
