@@ -36,6 +36,8 @@ public:
 
 	void ReadWayPoint();
 
+	void ReadRoad();
+
 protected:
 	void wheelEvent(QWheelEvent* event)override;
 	void mouseMoveEvent(QMouseEvent* event)override;

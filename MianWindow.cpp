@@ -9,6 +9,7 @@ MianWindow::MianWindow(QWidget* parent)
 	userWidgetHide();
 	FileIO::ReadMapData();
 	ui.mapWidget->ReadWayPoint();
+	ui.mapWidget->ReadRoad();
 }
 
 MianWindow::~MianWindow()

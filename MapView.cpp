@@ -142,3 +142,12 @@ void MapView::ReadWayPoint()
 		printf("id: %d\n", wayPointItem.id);
 	}
 }
+
+void MapView::ReadRoad()
+{
+	for (auto& roadItem : GlobalVariable::roadMap)
+	{
+		AddRoad(roadItem.id);
+		printf("id: %d\n", roadItem.id);
+	}
+}
