@@ -51,7 +51,6 @@ void FileIO::ReadMapData(const char* filename_point, const char* filename_road)
 
 void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //路径点
 {
-
 	QJsonObject rootObj = Jdoc_wayPoint.object();
 	QJsonValue root = rootObj.value("wayPoint");
 	if (root.isArray()) {
@@ -59,7 +58,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //路径点
 		for (int i = 0; i < points.size(); ++i) {
 			QJsonValue perPoint = points.at(i);
 			if (perPoint.isObject()) {
-				WayPoint data = { 0 };
+				WayPoint data;
 				QJsonObject perPointObj = perPoint.toObject();
 
 				QJsonValue id = perPointObj.value("id");
@@ -75,7 +74,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //路径点
 				data.type = WayPointType(type.toInt());
 
 				for (int j = 0; j < roadIds.size(); ++j) {
-					data.roadIds[j] = roadIds[j].toInt();
+					data.AddRoad(roadIds[j].toInt());
 				}
 				wayPointMap.insert(i, data);
 			}
@@ -103,8 +102,8 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc_road)        //道路
 				data.id = id.toInt();
 				data.u = u.toInt();
 				data.v = v.toInt();
-				
-				roadMap.insert(i,data);
+
+				roadMap.insert(i, data);
 			}
 		}
 	}
@@ -128,9 +127,9 @@ QJsonObject FileIO::WayPointToObject(WayPoint& WayPoint)
 
 	QJsonArray roadIdsArray;
 
-	for (uint16_t roadId = 0; roadId < WayPoint.roadIds.size(); ++roadId) {
-		roadIdsArray.append(WayPoint.roadIds[roadId]);
-	}
+	auto roadList = WayPoint.GetRoadIds();
+	for (const auto& roadId : roadList)
+		roadIdsArray.append(roadId);
 
 	obj.insert("roadIds", roadIdsArray);
 
