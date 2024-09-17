@@ -32,10 +32,10 @@ public:
 private:
 
 	//解析路径点数据
-	static void ParseWayPointData(QJsonDocument Jdoc);
+	static void ParseWayPointData(QJsonDocument Jdoc_wayPoint);
 
 	//解析路线数据
-	static void ParseWayRoadData(QJsonDocument Jdoc);
+	static void ParseWayRoadData(QJsonDocument Jdoc_road);
 
 	//路径点结构转换json对象
 	static QJsonObject QMap_WayPointToJson(QMap<uint16_t, WayPoint>& pointMap);
