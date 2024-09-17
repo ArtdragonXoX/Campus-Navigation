@@ -70,13 +70,10 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //Â·¾¶µã
 
 				data.name = name.toString();
 				data.id = id.toInt();
-				for (int j = 0; j < coord.size(); ++j) {
-					data.coord.x = coord[j].toDouble();
-					if (j + 1 == coord.size()) {
-						data.coord.y = coord[j].toDouble();
-					}
-				}
+				data.coord.x = coord[0].toDouble();
+				data.coord.y = coord[1].toDouble();
 				data.type = WayPointType(type.toInt());
+
 				for (int j = 0; j < roadIds.size(); ++j) {
 					data.roadIds[j] = roadIds[j].toInt();
 				}
