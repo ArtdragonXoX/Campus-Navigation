@@ -70,6 +70,8 @@ void MapView::AddRoad(uint16_t id)
 	auto roadItem = new RoadRectItem(id);
 	roadItemMap.insert(id, roadItem);
 	scene->addItem(roadItem);
+	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.append(id);
+	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).roadIds.append(id);
 }
 
 void MapView::DeleteWayPoint(uint16_t id)
