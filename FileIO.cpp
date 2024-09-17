@@ -67,7 +67,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //路径点
 				QJsonArray roadIds = perPointObj.value("roadIds").toArray();
 				QJsonValue type = perPointObj.value("type");
 				QJsonValue name = perPointObj.value("name");
-				
+
 				data.name = name.toString();
 				data.id = id.toInt();
 				for (int j = 0; j < coord.size(); ++j) {
@@ -106,8 +106,8 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc_road)        //道路
 				data.id = id.toInt();
 				data.u = u.toInt();
 				data.v = v.toInt();
-
-				roadMap.insert(i, data);
+				
+				roadMap.insert(i,data);
 			}
 		}
 	}
