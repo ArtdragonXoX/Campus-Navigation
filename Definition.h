@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include <QPointF>
+#include <iostream>
 
 using namespace std;
 
@@ -51,7 +52,11 @@ struct WayPoint
 	QString name;
 	Coord coord;
 	WayPointType type;
-	QList<uint16_t> roadIds;
+	QList<uint16_t>* roadIds;
+
+	WayPoint() : id(0), type(WayPointType::RoadNode), roadIds(nullptr) {
+		roadIds = new QList<uint16_t>();
+	}
 
 	QPointF ToQPointF()
 	{
@@ -65,6 +70,32 @@ struct WayPoint
 	double_t operator - (const Coord& other) const
 	{
 		return coord - other;
+	}
+
+	int GetRoadNum() const
+	{
+		return roadIds->size();
+	}
+
+	uint16_t GetRoadId(int index) const
+	{
+		return roadIds->at(index);
+	}
+
+	QList<uint16_t>& GetRoadIds()
+	{
+		return *roadIds;
+	}
+
+	bool contains(const uint16_t& roadId) const
+	{
+		return roadIds->contains(roadId);
+	}
+
+	void AddRoad(uint16_t roadId)
+	{
+		roadIds->append(roadId);
+		std::cout << "roadsNum: " << roadIds->size() << std::endl;
 	}
 };
 
