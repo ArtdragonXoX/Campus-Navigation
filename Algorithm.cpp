@@ -265,7 +265,7 @@ AnswerList Algorithm::Method(uint16_t startPoint, uint16_t endPoint, PointList p
 		QList<pair<uint16_t, uint16_t>> tem = Traceback(nowpoint, closeList, startPointID);
 		if (!answerList.p.isEmpty()) {
 			answerList.p.pop_back();
-			tem[tem.size() - 1].second = answerList.p_road[answerList.p_road.size()-1];
+			tem[0].second = answerList.p_road[answerList.p_road.size()-1];
 			answerList.p_road.pop_back();
 		}
 		for (int i = 0;i < tem.size();i++) {
