@@ -38,6 +38,16 @@ public:
 
 	void ReadRoad();
 
+	void ShowPoint(uint16_t id);
+
+	void HideAllRoadPoint();
+	void HidePoint(uint16_t id);
+
+	void ShowRoad(uint16_t id);
+
+	void HideAllRoad();
+	void HideRoad(uint16_t id);
+
 protected:
 	void wheelEvent(QWheelEvent* event)override;
 	void mouseMoveEvent(QMouseEvent* event)override;
