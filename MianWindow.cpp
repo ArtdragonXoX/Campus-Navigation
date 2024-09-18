@@ -151,13 +151,13 @@ void MianWindow::Query()
 	}
 	//ртобн╙╡Бйт
 	Algorithm A;
-	//QList<pair<uint16_t, uint16_t>> tem = A.ReturnData(wayPointList[wayPointList.size()-1], A.Method(wayPointList[0], A.AddMiddlPoint(A.DataPutIn(wayPointList))));
+	QList<pair<uint16_t, uint16_t>> tem = A.ReturnData(wayPointList[wayPointList.size() - 1], A.Method(wayPointList[0], A.AddMiddlPoint(A.DataPutIn(wayPointList))));
 	QList<pair<uint16_t, uint16_t>> temp = A.ReturnData(A.Method(wayPointList[0], wayPointList[wayPointList.size() - 1], A.DataPutIn(wayPointList)));
-	for (int i = 0;i < temp.size();i++) {
+	for (int i = 0; i < temp.size(); i++) {
 		cout << temp[i].first << " ";
 	}
 	cout << endl;
-	for (int i = 0;i < temp.size();i++) {
+	for (int i = 0; i < temp.size(); i++) {
 		cout << temp[i].second << " ";
 	}
 	cout << endl;
