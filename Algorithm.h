@@ -14,6 +14,7 @@
 #include <cfloat>
 #include <stack>
 #include <utility>
+#include <queue>
 
 using namespace GlobalVariable;
 using namespace std;
@@ -27,6 +28,29 @@ typedef struct PointList {
 	QList<uint16_t> CheckList;
 	uint16_t PointNum;
 }PointList;
+
+typedef struct Apoint{
+	WayPoint point;
+	uint16_t fatherpoint;
+	uint16_t road;
+	double alreadCost;
+    double moveCost;
+
+	bool operator > (const Apoint& other) const
+	{
+		if (moveCost+alreadCost > other.moveCost + other.alreadCost)
+			return true;
+		else
+			return false;
+	}
+	bool operator < (const Apoint& other) const
+	{
+		if (moveCost + alreadCost < other.moveCost + other.alreadCost)
+			return true;
+		else
+			return false;
+	}
+}Apoint;
 
 typedef struct AnswerList {
 	QList<uint16_t> WayPointList;
@@ -42,11 +66,13 @@ public:
 
 	static PointList DataPutIn(QList<uint16_t>(&WayPointList));//数据录入
 	static PointList AddMiddlPoint(PointList pointList);//补充未给予途径点,制作所需数据
-	static void Method();
 	static AnswerList Method(uint16_t startPointID, PointList pointList);//Dijkatra算法实现
-	//static void Method(int y);//A*算法实现
+	static AnswerList Method(uint16_t startPoint, uint16_t endPoint, PointList pointList);//A*算法实现
 	static QList<pair<uint16_t, uint16_t>> ReturnData(uint16_t endPointID, AnswerList answerList);//输出结果数据
-	static uint16_t DeepSearch(uint16_t startPointID, uint16_t endPointID, uint16_t lastPointID, PointList& pointList);
+	static QList<pair<uint16_t, uint16_t>> ReturnData(AnswerList answerList);//输出A*结果数据
+	static uint16_t DeepSearch(uint16_t startPointID, uint16_t endPointID,uint16_t lastPointID, double lastcost, PointList& pointList);
 	static pair<double, uint16_t> JudgeSameRoad(uint16_t point1, uint16_t point2);
 	static bool CheckSame(uint16_t point,PointList (&pointList));
+	static double CalcuCost(uint16_t startPointID, uint16_t endPointID);
+	static QList<pair<uint16_t, uint16_t>> Traceback(Apoint endPoint, QList<Apoint> closeList,uint16_t startPointID);
 };
