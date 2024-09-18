@@ -131,6 +131,8 @@ void MianWindow::AddBuidingsToList()
 void MianWindow::ClearBuildingList()
 {
 	ui.buildingsListWidget->clear();
+	ui.mapWidget->HideAllRoadPoint();
+	ui.mapWidget->HideAllRoad();
 }
 
 void MianWindow::DeleteBuildingInList(uint16_t id)
@@ -139,6 +141,8 @@ void MianWindow::DeleteBuildingInList(uint16_t id)
 
 void MianWindow::Query()
 {
+	ui.mapWidget->HideAllRoadPoint();
+	ui.mapWidget->HideAllRoad();
 	QList<uint16_t> wayPointList;
 	for (int i = 0; i < ui.buildingsListWidget->count(); i++)
 	{
