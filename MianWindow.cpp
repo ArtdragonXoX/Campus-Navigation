@@ -11,7 +11,7 @@ MianWindow::MianWindow(QWidget* parent)
 	ui.mapWidget->ReadWayPoint();
 	ui.mapWidget->ReadRoad();
 	ui.mapWidget->HideAllRoadPoint();
-	//ui.mapWidget->HideAllRoad();
+	ui.mapWidget->HideAllRoad();
 }
 
 MianWindow::~MianWindow()
