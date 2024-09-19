@@ -1,8 +1,8 @@
 #include "Algorithm.h"
 #include <iostream>//
 using namespace GlobalVariable;
-PointList Algorithm::DataPutIn(QList<uint16_t> (&WayPointList)) {
-	/* 
+PointList Algorithm::DataPutIn(QList<uint16_t>(&WayPointList)) {
+	/*
 	* 录入V,登记第一个pointNum
 	*/
 	PointList pointList;
@@ -21,18 +21,18 @@ PointList Algorithm::AddMiddlPoint(PointList pointList) {
 	for (int i = 0;i < pointList.PointNum;i++) {
 		tem.push_back(INF);
 		temp.push_back(UINT16_MAX);
-	}	
+	}
 	for (int i = 0;i < pointList.PointNum;i++) {
 		pointList.AdjTable.push_back(tem);
 		pointList.RoadTable.push_back(temp);
 	}
-		
+
 	uint16_t searchNum = pointList.PointNum;
 	for (uint16_t i = 0;i < searchNum;i++) {
 		for (uint16_t j = i;j < searchNum;j++) {
 			pair<double, uint16_t> judge = JudgeSameRoad(pointList.WayPointList[i], pointList.WayPointList[j]);
-			if (judge.first==INF) {
-				DeepSearch(pointList.WayPointList[i], pointList.WayPointList[j],0,INF,pointList);
+			if (judge.first == INF) {
+				DeepSearch(pointList.WayPointList[i], pointList.WayPointList[j], 0, INF, pointList);
 				pointList.CheckList.clear();
 			}
 			else {
@@ -47,16 +47,16 @@ PointList Algorithm::AddMiddlPoint(PointList pointList) {
 	return pointList;
 }
 
-pair<double,uint16_t> Algorithm::JudgeSameRoad(uint16_t point1, uint16_t point2) {
+pair<double, uint16_t> Algorithm::JudgeSameRoad(uint16_t point1, uint16_t point2) {
 	if (point1 == point2) return { INF,0 };
 	QList<uint16_t> roadIDs = wayPointMap.value(point1).GetRoadIds();
 	for (int i = 0;i < roadIDs.size();i++) {
 		Road roadID = roadMap.value(roadIDs[i]);
-		if (point2 == roadID.u || point2 == roadID.v) {
+		if (point2 == roadID.u|| point2 == roadID.v) {
 			WayPoint P1 = wayPointMap.value(point1);
 			WayPoint P2 = wayPointMap.value(point2);
 			double distance = P1 - P2;
-			return { distance , roadIDs[i]};
+			return { distance , roadIDs[i] };
 		}
 	}
 	return { INF,0 };
@@ -71,11 +71,11 @@ bool Algorithm::CheckSame(uint16_t point, PointList(&pointList)) {
 	return false;
 }
 
-uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID ,uint16_t lastPointID,double lastcost,PointList& pointList) {
+uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID, uint16_t lastPointID, double lastcost, PointList& pointList) {
 	if (startPointID == endPointID) {
 		return 1;
 	}
-	
+
 	if (CheckSame(startPointID, pointList)) {//剔除重复搜寻点（剔除回环与中间点重复）
 		return 0;
 	}
@@ -102,7 +102,7 @@ uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID ,uint1
 		}
 	}
 
-	if (judge > 0 ) {
+	if (judge > 0) {
 		/*邻接表录入信息*/
 		bool same = true;
 		for (uint16_t i = 0;i < pointList.PointNum;i++)
@@ -118,7 +118,7 @@ uint16_t Algorithm::DeepSearch(uint16_t startPointID, uint16_t endPointID ,uint1
 				tem.push_back(INF);
 				temp.push_back(UINT16_MAX);
 			}
-			
+
 			pointList.AdjTable.push_back(tem);
 			pointList.RoadTable.push_back(temp);
 
@@ -172,8 +172,8 @@ AnswerList Algorithm::Method(uint16_t startPointID, PointList pointList) {
 		}
 		if (t == startPointID) break;
 		flag[t] = true;//标记选中
-		for(int j=0;j< pointList.PointNum;j++)//更新路径
-			if(!flag[j]&& pointList.AdjTable[t][j]<INF)
+		for (int j = 0;j < pointList.PointNum;j++)//更新路径
+			if (!flag[j] && pointList.AdjTable[t][j] < INF)
 				if (answerList.dist[j] > answerList.dist[t] + pointList.AdjTable[t][j]) {
 					answerList.dist[j] = answerList.dist[t] + pointList.AdjTable[t][j];
 					answerList.p[j] = t;
@@ -185,19 +185,19 @@ AnswerList Algorithm::Method(uint16_t startPointID, PointList pointList) {
 
 QList<pair<uint16_t, uint16_t>> Algorithm::ReturnData(uint16_t endPointID, AnswerList answerList) {
 	//输出数据
-	QList<pair<uint16_t,uint16_t>> answer;
+	QList<pair<uint16_t, uint16_t>> answer;
 
 	double front;
 	for (uint16_t i = 0;i < answerList.WayPointList.size();i++)
 		if (answerList.WayPointList[i] == endPointID)
 			front = i;
 
-	stack<pair<uint16_t,uint16_t>>S;
+	stack<pair<uint16_t, uint16_t>>S;
 	if (front == UINT16_MAX && endPointID != front)
 		cout << "无路可达！" << endl;
 
 	while (front != UINT16_MAX) {
-		S.push({ front ,answerList.p_road[front]});
+		S.push({ front ,answerList.p_road[front] });
 		front = answerList.p[front];
 	}
 	cout << "路径为： ";
@@ -216,10 +216,10 @@ AnswerList Algorithm::Method(uint16_t startPoint, uint16_t endPoint, PointList p
 	*/
 	AnswerList answerList;
 	answerList.WayPointList = pointList.WayPointList;
-	
 
-	for (int i = 0;i < pointList.PointNum-1;i++) {
-		uint16_t startPointID = pointList.WayPointList[i], endPointID = pointList.WayPointList[i+1];
+
+	for (int i = 0;i < pointList.PointNum - 1;i++) {
+		uint16_t startPointID = pointList.WayPointList[i], endPointID = pointList.WayPointList[i + 1];
 		answerList.startPointID = startPointID;
 		pointList.CheckList.clear();
 		priority_queue<Apoint, vector<Apoint>, greater<Apoint>> openList;
@@ -240,6 +240,8 @@ AnswerList Algorithm::Method(uint16_t startPoint, uint16_t endPoint, PointList p
 			openList.pop();
 
 			QList<uint16_t> roadIDs = nowpoint.point.GetRoadIds();
+
+			auto tempfjdf= wayPointMap.value(1);
 			for (int i = 0;i < roadIDs.size();i++) {//周围未去过的点加入开放列表
 				Road roadID = roadMap.value(roadIDs[i]);
 				uint16_t otherone;
@@ -248,7 +250,6 @@ AnswerList Algorithm::Method(uint16_t startPoint, uint16_t endPoint, PointList p
 				else
 					otherone = roadID.u;
 				if (!CheckSame(otherone, pointList)) {
-
 					Apoint tem;
 					tem.point = wayPointMap.value(otherone);
 					tem.fatherpoint = nowpoint.point.id;
@@ -258,14 +259,18 @@ AnswerList Algorithm::Method(uint16_t startPoint, uint16_t endPoint, PointList p
 					openList.push(tem);
 				}
 			}
-			cout << endl;
-			nowpoint = openList.top();//更新nowpoint
+			
+			if (nowpoint.point.id == openList.top().point.id) {//更新nowpoint
+				openList.pop();
+				nowpoint = openList.top();
+			}else
+				nowpoint = openList.top();
 			if (nowpoint.point.id == endPointID) break;
 		}
 		QList<pair<uint16_t, uint16_t>> tem = Traceback(nowpoint, closeList, startPointID);
 		if (!answerList.p.isEmpty()) {
 			answerList.p.pop_back();
-			tem[0].second = answerList.p_road[answerList.p_road.size()-1];
+			tem[0].second = answerList.p_road[answerList.p_road.size() - 1];
 			answerList.p_road.pop_back();
 		}
 		for (int i = 0;i < tem.size();i++) {
@@ -280,7 +285,7 @@ double Algorithm::CalcuCost(uint16_t startPointID, uint16_t endPointID) {
 	return wayPointMap.value(startPointID).coord - wayPointMap.value(endPointID).coord;
 }
 
-QList<pair<uint16_t, uint16_t>> Algorithm::Traceback(Apoint endPoint, QList<Apoint> closeList,uint16_t startPointID) {
+QList<pair<uint16_t, uint16_t>> Algorithm::Traceback(Apoint endPoint, QList<Apoint> closeList, uint16_t startPointID) {
 	Apoint tem = endPoint;
 	QList<pair<uint16_t, uint16_t>> temp;
 	while (tem.point.id != startPointID) {
@@ -297,6 +302,8 @@ QList<pair<uint16_t, uint16_t>> Algorithm::Traceback(Apoint endPoint, QList<Apoi
 QList<pair<uint16_t, uint16_t>> Algorithm::ReturnData(AnswerList answerList) {
 	QList<pair<uint16_t, uint16_t>> answer;
 	for (int i = 0;i < answerList.p_road.size();i++) {
+		double road = INF;
+		if (i > 1) road = JudgeSameRoad(answerList.p[i-1], answerList.p[i]).second;
 		answer.push_back({ answerList.p[i],answerList.p_road[i] });
 	}
 	return answer;

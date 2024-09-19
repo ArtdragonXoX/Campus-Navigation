@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MianWindow.h"
 
+#include "Algorithm.h"
 #include "MapView.h"
 #include "Definition.h"
 #include "GlobalVariable.h"

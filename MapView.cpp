@@ -72,12 +72,12 @@ void MapView::AddRoad(uint16_t id)
 	auto roadItem = new RoadRectItem(id);
 	roadItemMap.insert(id, roadItem);
 	scene->addItem(roadItem);
-	if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).contains(id))
-		//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.append(id);
-		GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).AddRoad(id);
-	if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).contains(id))
-		//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).roadIds.append(id);
-		GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).AddRoad(id);
+	//if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).contains(id))
+	//	//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.append(id);
+	//	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).AddRoad(id);
+	//if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).contains(id))
+	//	//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).roadIds.append(id);
+	//	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).AddRoad(id);
 
 	//std::cout << "roadIDs:" << id << std::endl;
 	//std::cout << "roadIDsNum:" << GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.size() << std::endl;
@@ -160,5 +160,58 @@ void MapView::ReadRoad()
 	{
 		AddRoad(roadItem.id);
 		printf("id: %d\n", roadItem.id);
+	}
+}
+
+void MapView::ShowPoint(uint16_t id)
+{
+	auto wayPointItem = wayPointMap.value(id);
+	if (wayPointItem)
+	{
+		wayPointItem->show();
+	}
+}
+
+void MapView::HideAllRoadPoint()
+{
+	for (auto& wayPointItem : wayPointMap)
+	{
+		if (GlobalVariable::wayPointMap.value(wayPointItem->ID()).type == WayPointType::RoadNode)
+			wayPointItem->hide();
+	}
+}
+
+void MapView::HidePoint(uint16_t id)
+{
+	auto wayPointItem = wayPointMap.value(id);
+	if (wayPointItem)
+	{
+		wayPointItem->hide();
+	}
+}
+
+void MapView::ShowRoad(uint16_t id)
+{
+	auto roadItem = roadItemMap.value(id);
+	if (roadItem)
+	{
+		roadItem->show();
+	}
+}
+
+void MapView::HideAllRoad()
+{
+	for (auto& roadItem : roadItemMap)
+	{
+		roadItem->hide();
+	}
+}
+
+void MapView::HideRoad(uint16_t id)
+{
+	auto roadItem = roadItemMap.value(id);
+	if (roadItem)
+	{
+		roadItem->hide();
 	}
 }
