@@ -76,7 +76,7 @@ void FileIO::ParseWayPointData(QJsonDocument Jdoc_wayPoint)       //路径点
 				for (int j = 0; j < roadIds.size(); ++j) {
 					data.AddRoad(roadIds[j].toInt());
 				}
-				wayPointMap.insert(i, data);
+				wayPointMap.insert(data.id, data);
 			}
 		}
 	}
@@ -103,7 +103,7 @@ void FileIO::ParseWayRoadData(QJsonDocument Jdoc_road)        //道路
 				data.u = u.toInt();
 				data.v = v.toInt();
 
-				roadMap.insert(i, data);
+				roadMap.insert(data.id, data);
 			}
 		}
 	}

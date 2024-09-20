@@ -10,6 +10,8 @@ MianWindow::MianWindow(QWidget* parent)
 	FileIO::ReadMapData();
 	ui.mapWidget->ReadWayPoint();
 	ui.mapWidget->ReadRoad();
+	ui.mapWidget->HideAllRoadPoint();
+	ui.mapWidget->HideAllRoad();
 }
 
 MianWindow::~MianWindow()
@@ -130,7 +132,11 @@ void MianWindow::AddBuidingsToList()
 
 void MianWindow::ClearBuildingList()
 {
-	ui.buildingsListWidget->clear();
+	int num = ui.buildingsListWidget->count();
+	for (int i = 0; i < num; i++)
+	{
+		delete ui.buildingsListWidget->itemWidget(ui.buildingsListWidget->item(0));
+	}
 	ui.mapWidget->HideAllRoadPoint();
 	ui.mapWidget->HideAllRoad();
 }
@@ -149,6 +155,18 @@ void MianWindow::Query()
 		BuildingsListItem* item = (BuildingsListItem*)ui.buildingsListWidget->itemWidget(ui.buildingsListWidget->item(i));
 		wayPointList.append(item->ID());
 	}
+	Algorithm A;
+	QList<pair<uint16_t, uint16_t>> temp = A.ReturnData(A.Method(wayPointList[0], wayPointList[wayPointList.size() - 1], A.DataPutIn(wayPointList)));
+	for (int i = 0; i < temp.size(); i++) {
+		ui.mapWidget->ShowPoint(temp[i].first);
+		cout << temp[i].first << " ";
+	}
+	cout << endl;
+	for (int i = 1; i < temp.size(); i++) {
+		ui.mapWidget->ShowRoad(temp[i].second);
+		cout << temp[i].second << " ";
+	}
+	cout << endl;
 }
 
 void MianWindow::ExportWayPoint()

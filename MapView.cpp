@@ -72,12 +72,12 @@ void MapView::AddRoad(uint16_t id)
 	auto roadItem = new RoadRectItem(id);
 	roadItemMap.insert(id, roadItem);
 	scene->addItem(roadItem);
-	if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).contains(id))
-		//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.append(id);
-		GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).AddRoad(id);
-	if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).contains(id))
-		//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).roadIds.append(id);
-		GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).AddRoad(id);
+	//if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).contains(id))
+	//	//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.append(id);
+	//	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).AddRoad(id);
+	//if (!GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).contains(id))
+	//	//GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).roadIds.append(id);
+	//	GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).v).AddRoad(id);
 
 	//std::cout << "roadIDs:" << id << std::endl;
 	//std::cout << "roadIDsNum:" << GlobalVariable::wayPointMap.value(GlobalVariable::roadMap.value(id).u).roadIds.size() << std::endl;
