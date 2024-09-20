@@ -137,7 +137,6 @@ void MianWindow::ClearBuildingList()
 	{
 		delete ui.buildingsListWidget->itemWidget(ui.buildingsListWidget->item(0));
 	}
-
 	ui.mapWidget->HideAllRoadPoint();
 	ui.mapWidget->HideAllRoad();
 }
