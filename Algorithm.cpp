@@ -9,6 +9,8 @@ PointList Algorithm::DataPutIn(QList<uint16_t>(&WayPointList)) {
 	pointList.WayPointList = WayPointList;
 	pointList.PointNum = pointList.WayPointList.size();
 
+	MakeList(pointList);//
+
 	return pointList;
 }
 
@@ -305,4 +307,22 @@ QList<pair<uint16_t, uint16_t>> Algorithm::ReturnData(AnswerList answerList) {
 		answer.push_back({ answerList.p[i],answerList.p_road[i] });
 	}
 	return answer;
+}
+
+void Algorithm::MakeList(PointList& pointList) {
+	double cost=0;
+	uint16_t flag = 0;
+	for (int i = 1;i < pointList.WayPointList.size()-1;i++) {
+		for (int j = i+1;j < pointList.WayPointList.size()-1;j++) {
+			double tem = CalcuCost(pointList.WayPointList[i], pointList.WayPointList[j]);
+			if ( tem > cost) {
+				cost = tem;
+				flag = j;
+			}
+		}
+		uint16_t ID = pointList.WayPointList[i];
+		pointList.WayPointList[i]=pointList.WayPointList[flag];
+		pointList.WayPointList[flag] = ID;
+	}
+	return;
 }

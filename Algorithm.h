@@ -75,4 +75,5 @@ public:
 	static bool CheckSame(uint16_t point,PointList (&pointList));
 	static double CalcuCost(uint16_t startPointID, uint16_t endPointID);
 	static QList<pair<uint16_t, uint16_t>> Traceback(Apoint endPoint, QList<Apoint> closeList,uint16_t startPointID);
+	static void MakeList(PointList& pointList);
 };
